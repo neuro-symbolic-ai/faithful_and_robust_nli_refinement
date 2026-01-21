@@ -1,0 +1,9 @@
+pyswip==0.2.2
+isabelle-client
+argparse
+pathlib
+openai
+tenacity
+python-dotenv
+sympy
+accelerate
