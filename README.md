@@ -86,7 +86,7 @@ python main.py -l gpt-4o -d example
 
 ## Reference
 
-If you find this repository useful, please consider citing our demo paper. 
+If you find this repository useful, please consider citing our paper. 
 
 ```
 @inproceedings{quan-etal-2025-faithful,
