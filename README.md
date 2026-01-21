@@ -68,8 +68,9 @@ In `config.yaml`, please set `isabelle.master_dir` to the **absolute path** of t
 ```yaml
 isabelle:
   master_dir: '/path/to/faithful_and_robust_nli_refinement/formalisation/isabelle'
+```
 
-###  Reproducibility
+#### Reproducibility
 Clone this repository into the same directory where you installed Isabelle. Run the following command:
 
 ```bash
