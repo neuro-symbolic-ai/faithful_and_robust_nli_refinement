@@ -18,6 +18,10 @@ To install all the required Python libraries for running, clone the repository l
 pip install -r requirements.txt
 ```
 
+> **Note:** This project requires `isabelle-client==0.5.0`.  
+> Please ensure that you are using this exact version for compatibility.
+
+
 #### Isabelle Linux Installation:
 
 Download Isabelle2023 in your working directory (e.g., Desktop):
@@ -56,6 +60,14 @@ print(os.environ['PATH'])
 
 #### API Keys
 Set your `api_key` in the `config.yaml` file to use the generative models.
+
+#### Configuration
+
+In `config.yaml`, please set `isabelle.master_dir` to the **absolute path** of the Isabelle formalisation directory:
+
+```yaml
+isabelle:
+  master_dir: '/path/to/faithful_and_robust_nli_refinement/formalisation/isabelle'
 
 ###  Reproducibility
 Clone this repository into the same directory where you installed Isabelle. Run the following command:

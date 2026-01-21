@@ -1,5 +1,5 @@
 isabelle:
-  master_dir: 'formalisation/isabelle'
+  master_dir: '/path/to/faithful_and_robust_nli_refinement/formalisation/isabelle'
 
 gpt-3.5-turbo:
   engine: gpt-3.5-turbo

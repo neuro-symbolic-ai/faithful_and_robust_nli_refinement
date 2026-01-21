@@ -109,96 +109,70 @@ class RefinementModel():
             to_append_explanation = f'{i} iteration: {explanation}'
             history_explanation.append(to_append_explanation)
             print("\n-------------- Verification and Refinement -------------------")
-            if self.critique_mode == 'hard':
-                critique_output = self.critique_model.critique(
-                    iteration_number=i,
-                    explanation=explanation,
-                    hypothesis=hypothesis,
-                    premise=premise
-                )
-                history_critique_output.append(f'{i} iteration: {critique_output}')
-            else:
-                for model in self.critique_models_list:
-                    critique_output = model.critique(
-                        premise=premise,
-                        hypothesis=hypothesis,
-                        explanation=explanation
-                    )
-                    print(f'{i} iteration: {critique_output}')
-                    all_critique_output.append(critique_output)
-                history_critique_output.append(f'{i} iteration: {all_critique_output}')
+
+            critique_output = self.critique_model.critique(
+                iteration_number=i,
+                explanation=explanation,
+                hypothesis=hypothesis,
+                premise=premise
+            )
+            history_critique_output.append(f'{i} iteration: {critique_output}')
+
             print("\n-------------- 4) Results -------------------\n")
             # if the critique model is a hard critique model
-            if self.critique_mode == 'hard':
-                if not critique_output['syntactic validity']:
-                    print("\nSyntacitc error found in the formalization!! Go to the next iteration...\n")
-                    if i == iterations - 1:
-                        print(f'The explanation is not valid after {iterations} iterations')
-                        result = {
-                            'semantic validity': critique_output['semantic validity'],
-                            'premise': premise,
-                            'hypothesis': hypothesis,
-                            'history explanation': history_explanation,
-                            'history critique output': history_critique_output
-                        }
-                    continue
 
-                if critique_output['semantic validity']:
-                    print("The explanation is logically valid!")
+            if not critique_output['syntactic validity']:
+                print("\nSyntacitc error found in the formalization!! Go to the next iteration...\n")
+                if i == iterations - 1:
+                    print(f'The explanation is not valid after {iterations} iterations')
                     result = {
                         'semantic validity': critique_output['semantic validity'],
                         'premise': premise,
                         'hypothesis': hypothesis,
-                        'refined explanation': explanation,
-                        'refined iteration': i,
                         'history explanation': history_explanation,
                         'history critique output': history_critique_output
                     }
-                    break
-                else:
-                    # if the explanation is not valid, refine the explanation
-                    print("No proof can be found!The explanation is not logically valid! Refinement...")
-                    print("\n-------------- 5) Refinement Feedback -------------------\n")
-                    if 'error code' in critique_output:
-                        print(f'Error:\n{critique_output["error code"]}')
-                    else:
-                        critique_output['error code'] = ''
-                    print(f'\nLogical information:\n{critique_output["logical information"]}')
-                    explanation = self._refine_explanation(
-                        explanation, hypothesis,
-                        critique_output, premise,
-                    )
-                    print('\n-------------- 6) Refined Explanation -------------------\n')
-                    for j, sentence in enumerate(explanation.split('.'), 1):
-                        if sentence.strip():
-                            print(f"{j}. {sentence.strip()}")
-                    if i == iterations - 1:
-                        print(f'The explanation is not valid after {iterations} iterations')
-                        result = {
-                            'semantic validity': critique_output['semantic validity'],
-                            'premise': premise,
-                            'hypothesis': hypothesis,
-                            'history explanation': history_explanation,
-                            'history critique output': history_critique_output
-                        }
-            elif self.critique_mode == 'soft':
-                print(f'{i} iteration: {all_critique_output}')
+                continue
+
+            if critique_output['semantic validity']:
+                print("The explanation is logically valid!")
+                result = {
+                    'semantic validity': critique_output['semantic validity'],
+                    'premise': premise,
+                    'hypothesis': hypothesis,
+                    'refined explanation': explanation,
+                    'refined iteration': i,
+                    'history explanation': history_explanation,
+                    'history critique output': history_critique_output
+                }
+                break
+            else:
+                # if the explanation is not valid, refine the explanation
+                print("No proof can be found!The explanation is not logically valid! Refinement...")
                 print("\n-------------- 5) Refinement Feedback -------------------\n")
+                if 'error code' in critique_output:
+                    print(f'Error:\n{critique_output["error code"]}')
+                else:
+                    critique_output['error code'] = ''
+                print(f'\nLogical information:\n{critique_output["logical information"]}')
                 explanation = self._refine_explanation(
                     explanation, hypothesis,
-                    all_critique_output, premise,
+                    critique_output, premise,
                 )
                 print('\n-------------- 6) Refined Explanation -------------------\n')
-                for sentence in explanation.split('.'):
+                for j, sentence in enumerate(explanation.split('.'), 1):
                     if sentence.strip():
-                        print(f"{sentence.strip()}")
+                        print(f"{j}. {sentence.strip()}")
                 if i == iterations - 1:
+                    print(f'The explanation is not valid after {iterations} iterations')
                     result = {
+                        'semantic validity': critique_output['semantic validity'],
                         'premise': premise,
                         'hypothesis': hypothesis,
                         'history explanation': history_explanation,
                         'history critique output': history_critique_output
                     }
+            
 
             print("=====================================================")
             

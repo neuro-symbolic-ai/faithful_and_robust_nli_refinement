@@ -189,6 +189,7 @@ class IsabelleCritique(CritiqueModel):
         contradiction_code = ''
         explanations = []
         found_explanations = {}
+
         finished_response = next((item for item in isabelle_response
                                   if item.response_type == 'FINISHED'), None)
         # Error Keywords
